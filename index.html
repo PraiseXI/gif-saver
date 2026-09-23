@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f8f7f4">
+  <meta name="description" content="Save a GIF from a direct link. No account needed.">
+  <title>GIF Saver</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar" aria-label="GIF Saver">
+      <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <span class="brand-name">GIF Saver</span>
+      <span class="top-note">No account needed</span>
+    </header>
+
+    <section class="workspace" aria-labelledby="page-title">
+      <div class="eyebrow"><span class="eyebrow-dot"></span> QUICK & SIMPLE</div>
+      <h1 id="page-title">Save a GIF<br><em>from a link.</em></h1>
+      <p class="intro">Paste a direct GIF link. Preview it, then save it to your phone.</p>
+
+      <form id="gif-form" novalidate>
+        <label for="gif-url">GIF link</label>
+        <div class="input-wrap">
+          <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m10 13 4-4M8 16H6a4 4 0 0 1 0-8h4m4 0h4a4 4 0 0 1 0 8h-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <input id="gif-url" name="url" type="url" inputmode="url" placeholder="https://example.com/animation.gif" autocomplete="url" spellcheck="false" required>
+          <button class="paste-button" id="paste-button" type="button">Paste</button>
+        </div>
+        <p class="field-hint">Use a link to the GIF file, usually ending in .gif.</p>
+        <button class="primary-button" type="submit">Preview GIF <span aria-hidden="true">↗</span></button>
+      </form>
+
+      <div id="message" class="message" role="status" aria-live="polite" hidden></div>
+
+      <section id="result" class="result" aria-label="GIF preview" hidden>
+        <div class="result-heading"><span>YOUR GIF</span><span id="image-status" class="image-status">Loading…</span></div>
+        <div class="preview-frame" id="preview-frame">
+          <img id="gif-preview" alt="GIF preview" draggable="false">
+        </div>
+        <div class="result-actions">
+          <button id="download-button" class="primary-button" type="button" disabled>Download GIF <span aria-hidden="true">↓</span></button>
+          <a id="open-button" class="secondary-button" href="#" target="_blank" rel="noopener noreferrer">Open GIF <span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="save-tip" id="save-tip"><strong>Want it in your gallery?</strong> Touch and hold the GIF above, then choose “Save to Photos” or “Download image.”</p>
+      </section>
+    </section>
+
+    <footer>Only direct GIF links are supported. GIFs stay on their original sites.</footer>
+  </main>
+  <script src="app.js" defer></script>
+</body>
+</html>
