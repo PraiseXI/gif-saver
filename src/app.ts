@@ -1,32 +1,37 @@
-const form = document.querySelector('#gif-form');
-const urlInput = document.querySelector('#gif-url');
-const pasteButton = document.querySelector('#paste-button');
-const message = document.querySelector('#message');
-const result = document.querySelector('#result');
-const preview = document.querySelector('#gif-preview');
-const imageStatus = document.querySelector('#image-status');
-const downloadButton = document.querySelector('#download-button');
-const openButton = document.querySelector('#open-button');
+import { gifFilename, parseGifUrl } from './core.js';
+
+const form = document.querySelector<HTMLFormElement>('#gif-form');
+const urlInput = document.querySelector<HTMLInputElement>('#gif-url');
+const pasteButton = document.querySelector<HTMLButtonElement>('#paste-button');
+const message = document.querySelector<HTMLDivElement>('#message');
+const result = document.querySelector<HTMLElement>('#result');
+const preview = document.querySelector<HTMLImageElement>('#gif-preview');
+const imageStatus = document.querySelector<HTMLSpanElement>('#image-status');
+const downloadButton = document.querySelector<HTMLButtonElement>('#download-button');
+const openButton = document.querySelector<HTMLAnchorElement>('#open-button');
+
+if (!form || !urlInput || !pasteButton || !message || !result || !preview || !imageStatus || !downloadButton || !openButton) {
+  throw new Error('GIF Saver UI is incomplete');
+}
+
+const statusMessage = message;
+const downloadLabel = downloadButton.firstChild;
+if (!(downloadLabel instanceof Text)) {
+  throw new Error('Download button label is missing');
+}
 
 let activeUrl = '';
 let loaded = false;
 
-function showMessage(text, success = false) {
-  message.textContent = text;
-  message.classList.toggle('success', success);
-  message.hidden = false;
+function showMessage(text: string, success = false): void {
+  statusMessage.textContent = text;
+  statusMessage.classList.toggle('success', success);
+  statusMessage.hidden = false;
 }
 
-function clearMessage() {
-  message.hidden = true;
-  message.textContent = '';
-}
-
-function parseGifUrl(value) {
-  let url;
-  try { url = new URL(value.trim()); } catch { return null; }
-  if (!['https:', 'http:'].includes(url.protocol)) return null;
-  return url;
+function clearMessage(): void {
+  statusMessage.hidden = true;
+  statusMessage.textContent = '';
 }
 
 pasteButton.addEventListener('click', async () => {
@@ -39,7 +44,7 @@ pasteButton.addEventListener('click', async () => {
   }
 });
 
-form.addEventListener('submit', (event) => {
+form.addEventListener('submit', (event: SubmitEvent) => {
   event.preventDefault();
   clearMessage();
   const url = parseGifUrl(urlInput.value);
@@ -74,15 +79,7 @@ preview.addEventListener('error', () => {
   showMessage('Could not preview this link. Check that it points directly to a public GIF file, or open it in a new tab.');
 });
 
-function gifFilename(url) {
-  const raw = url.pathname.split('/').pop() || 'gif';
-  let last;
-  try { last = decodeURIComponent(raw); } catch { last = raw; }
-  const clean = last.replace(/[^a-z0-9._-]/gi, '-').replace(/\.+$/, '').slice(0, 80);
-  return (clean || 'animation').replace(/\.[^.]+$/, '') + '.gif';
-}
-
-function saveBlob(blob, filename) {
+function saveBlob(blob: Blob, filename: string): void {
   const objectUrl = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = objectUrl;
@@ -96,7 +93,7 @@ function saveBlob(blob, filename) {
 downloadButton.addEventListener('click', async () => {
   if (!loaded || !activeUrl) return;
   downloadButton.disabled = true;
-  downloadButton.firstChild.textContent = 'Preparing GIF ';
+  downloadLabel.textContent = 'Preparing GIF ';
   clearMessage();
   try {
     const response = await fetch(activeUrl, { mode: 'cors', credentials: 'omit' });
@@ -112,6 +109,6 @@ downloadButton.addEventListener('click', async () => {
     showMessage('This GIF site blocks direct downloads here. Touch and hold the preview to save it, or tap Open GIF and save it there.');
   } finally {
     downloadButton.disabled = false;
-    downloadButton.firstChild.textContent = 'Download GIF ';
+    downloadLabel.textContent = 'Download GIF ';
   }
 });

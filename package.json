@@ -1,0 +1,18 @@
+{
+  "name": "gif-saver",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm run typecheck && vite build --base ./",
+    "typecheck": "tsc --project tsconfig.json --noEmit && tsc --project tsconfig.tests.json --noEmit",
+    "test": "npm run build && playwright test",
+    "serve": "vite preview --host 127.0.0.1 --port 8765"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^22.19.15",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.0"
+  }
+}
